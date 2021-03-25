@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>CRUD API</h1>
+    <%- body %>
+    <h2>List of all Users</h2>
+    <table id="allUsers"></table>
+    <input id='userFirstname' placeholder="Firstname">
+    <input id='userLastname' placeholder="Lastname">
+    <button id="btn--addUser">Add User</button>
+    <br>
+    <input id='userId' placeholder="User Id To Delete">
+    <button id="btn--deleteUser">Delete User</button>
+
+
+
+    <script>
+        //GET
+        function getUser(){
+            fetch('http://localhost:4000/users')
+                .then(response => response.json())
+                .then(data => {
+                    //console.log(data)
+                    let li = `<tr><th>Name</th><th>Email</th><th>Date Added</th><th>Id</th></tr>`;
+                    data.forEach((user) => {
+                        li += `<tr>
+                            <td>${user.name} </td>
+                            <td>${user.lastname}</td>         
+                            <td>${user.addedDate}</td>
+                            <td>${user._id}</td>           
+                        </tr>`;
+                    })
+                    document.getElementById("allUsers").innerHTML = li;
+                })
+                console.log('fetched em')
+        }
+        getUser();
+            
+        //POST
+        function addUser(){
+            let firstname= document.getElementById("userFirstname").value
+            let lastname = document.getElementById("userLastname").value
+            if(firstname !== '' && lastname !== ''){
+
+                fetch("http://localhost:4000/users", {
+                    method: "POST",
+                    // Adding body or contents to send
+                    body: JSON.stringify({
+                        name: firstname,
+                        lastname: lastname
+                    }),
+                    // Adding headers to the request
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+                // Converting to JSON
+                .then(response => response.json())
+                // Displaying results to console
+                .then(json => console.log(json));
+            }
+        }
+        function deleteUser(id){
+            
+            fetch("http://localhost:4000/users/" +id, {
+                method: "DELETE",
+            })
+            // Converting to JSON
+            .then(response => response.json())
+            // Displaying results to console
+            .then(json => console.log(json));
+        }
+        document.getElementById('btn--addUser').addEventListener('click',()=>{
+            addUser();
+            setTimeout(getUser(), 1000)
+        });
+        document.getElementById('btn--deleteUser').addEventListener('click',()=>{
+            let id=document.getElementById('userId').value;
+            console.log(id)
+            if(id !=='  '){
+                deleteUser(id);
+                return alert('user deleted')
+            }
+            alert('please enter user id')
+        });
+    </script>
+</body>
+
+</html>

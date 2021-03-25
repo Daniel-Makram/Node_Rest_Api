@@ -1,0 +1,27 @@
+GET http://localhost:4000/users
+
+###
+
+Get http://localhost:4000/users/605b034983f4ca72895886e0
+###
+
+POST http://localhost:4000/users/
+Content-Type: application/json
+
+{
+    "name":"John",
+    "lastname":"Doe"
+}
+
+###
+
+DELETE http://localhost:4000/users/605b035c83f4ca72895886e1
+
+###
+
+PATCH http://localhost:4000/users/605b035c83f4ca72895886e1
+Content-Type: application/json
+
+{
+    "name":"FooFighter"
+}
